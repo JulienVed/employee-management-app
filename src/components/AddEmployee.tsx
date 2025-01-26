@@ -1,47 +1,43 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { EmployeeService } from '../services/EmployeeService';
 
 const AddEmployee: React.FC = () => {
-    const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
-    const [dob, setDob] = useState('');
-    const [exitDate, setExitDate] = useState('');
-    const [jobTitle, setJobTitle] = useState('');
-    const [department, setDepartment] = useState('');
+    const history = useHistory();
+    const [employee, setEmployee] = useState({
+        name: '',
+        surname: '',
+        dateOfBirth: '',
+        exitDate: '',
+        jobTitle: '',
+        department: ''
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setEmployee({ ...employee, [name]: value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Logic to handle employee addition goes here
+        await EmployeeService.createEmployee(employee);
+        history.push('/employees');
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Name:</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-            </div>
-            <div>
-                <label>Surname:</label>
-                <input type="text" value={surname} onChange={(e) => setSurname(e.target.value)} required />
-            </div>
-            <div>
-                <label>Date of Birth:</label>
-                <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
-            </div>
-            <div>
-                <label>Exit Date:</label>
-                <input type="date" value={exitDate} onChange={(e) => setExitDate(e.target.value)} />
-            </div>
-            <div>
-                <label>Job Title:</label>
-                <input type="text" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} required />
-            </div>
-            <div>
-                <label>Department:</label>
-                <input type="text" value={department} onChange={(e) => setDepartment(e.target.value)} required />
-            </div>
-            <button type="submit">Add Employee</button>
-        </form>
+        <div>
+            <h2>Add Employee</h2>
+            <form onSubmit={handleSubmit}>
+                <input type="text" name="name" value={employee.name} onChange={handleChange} placeholder="Name" required />
+                <input type="text" name="surname" value={employee.surname} onChange={handleChange} placeholder="Surname" required />
+                <input type="date" name="dateOfBirth" value={employee.dateOfBirth} onChange={handleChange} required />
+                <input type="date" name="exitDate" value={employee.exitDate} onChange={handleChange} />
+                <input type="text" name="jobTitle" value={employee.jobTitle} onChange={handleChange} placeholder="Job Title" required />
+                <input type="text" name="department" value={employee.department} onChange={handleChange} placeholder="Department" required />
+                <button type="submit">Add Employee</button>
+            </form>
+        </div>
     );
-};
+}
 
 export default AddEmployee;

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import EmployeeService from '../services/EmployeeService';
+import { EmployeeService } from '../services/EmployeeService';
+import { Employee } from '../interfaces/Employee';
 
 const EmployeeList = () => {
-    const [employees, setEmployees] = useState([]);
+    const [employees, setEmployees] = useState<Employee[]>([]);
 
     useEffect(() => {
         fetchEmployees();
@@ -13,7 +14,7 @@ const EmployeeList = () => {
         setEmployees(data);
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id: string) => {
         await EmployeeService.deleteEmployee(id);
         fetchEmployees();
     };
@@ -36,15 +37,14 @@ const EmployeeList = () => {
                 <tbody>
                     {employees.map(employee => (
                         <tr key={employee.id}>
-                            <td>{employee.name}</td>
-                            <td>{employee.surname}</td>
+                            <td>{employee.firstName}</td>
+                            <td>{employee.lastName}</td>
                             <td>{employee.dateOfBirth}</td>
                             <td>{employee.exitDate}</td>
                             <td>{employee.jobTitle}</td>
                             <td>{employee.department}</td>
                             <td>
                                 <button onClick={() => handleDelete(employee.id)}>Delete</button>
-                                <a href={`/edit/${employee.id}`}>Edit</a>
                             </td>
                         </tr>
                     ))}

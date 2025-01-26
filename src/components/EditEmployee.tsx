@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import EmployeeService from '../services/EmployeeService';
+import { EmployeeService } from '../services/EmployeeService';
 
-const EditEmployee = () => {
-    const { id } = useParams();
+const EditEmployee: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
     const history = useHistory();
     const [employee, setEmployee] = useState({
         name: '',
@@ -22,12 +22,12 @@ const EditEmployee = () => {
         fetchEmployee();
     }, [id]);
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setEmployee({ ...employee, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await EmployeeService.updateEmployee(id, employee);
         history.push('/employees');
@@ -47,6 +47,6 @@ const EditEmployee = () => {
             </form>
         </div>
     );
-};
+}
 
 export default EditEmployee;

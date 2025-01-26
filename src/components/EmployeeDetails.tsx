@@ -1,14 +1,6 @@
 import React from 'react';
+import { Employee } from '../interfaces/Employee';
 
-interface Employee {
-    id: number;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    exitDate: string;
-    jobTitle: string;
-    department: string;
-}
 
 interface EmployeeDetailsProps {
     employee: Employee | null;
@@ -16,7 +8,7 @@ interface EmployeeDetailsProps {
     onDelete: () => void;
 }
 
-const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, onEdit, onDelete }) => {
+const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, onEdit, onDelete }: EmployeeDetailsProps) => {
     if (!employee) {
         return <div>No employee selected</div>;
     }
